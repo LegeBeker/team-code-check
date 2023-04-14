@@ -28,32 +28,6 @@ var chartData = {
     datasets: [] // data series
 };
 
-// Group the data by person
-var groupedData = {};
-finishedTimers.forEach(function (item) {
-    var person = item.person.toLowerCase();
-    if (!groupedData[person]) {
-        groupedData[person] = {};
-    }
-    var dateStr = new Date(item.end).toLocaleDateString();
-    if (chartData.labels.indexOf(dateStr) === -1) {
-        chartData.labels.push(dateStr);
-    }
-    if (!groupedData[person][dateStr]) {
-        groupedData[person][dateStr] = 0;
-    }
-    var start = new Date(item.start);
-    var end = new Date(item.end);
-    var timeDiff = end.getTime() - start.getTime();
-    var hours = timeDiff / (1000 * 60 * 60); // Convert milliseconds to hours
-    groupedData[person][dateStr] += hours;
-});
-
-// Sort the labels as dates
-chartData.labels.sort(function (a, b) {
-    return new Date(a) - new Date(b);
-});
-
 // Create an array of dates from 2023-03-29 to today
 var startDate = new Date('2023-03-29');
 var currentDate = new Date();
@@ -64,6 +38,24 @@ while (startDate <= currentDate) {
     }
     startDate.setDate(startDate.getDate() + 1);
 }
+
+// Group the data by person
+var groupedData = {};
+finishedTimers.forEach(function (item) {
+    var person = item.person.toLowerCase();
+    if (!groupedData[person]) {
+        groupedData[person] = {};
+    }
+    var dateStr = new Date(item.end).toLocaleDateString();
+    if (!groupedData[person][dateStr]) {
+        groupedData[person][dateStr] = 0;
+    }
+    var start = new Date(item.start);
+    var end = new Date(item.end);
+    var timeDiff = end.getTime() - start.getTime();
+    var hours = timeDiff / (1000 * 60 * 60); // Convert milliseconds to hours
+    groupedData[person][dateStr] += hours;
+});
 
 // Sort the labels as dates again
 chartData.labels.sort(function (a, b) {
