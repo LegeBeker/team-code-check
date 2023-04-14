@@ -19,6 +19,15 @@
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="type">Type:</label>
+                            <select id="type" name="type" class="form-control" required>
+                                <option value="" disabled selected>Select a type</option>
+                                <?php foreach ($types as $type) { ?>
+                                    <option value="<?php echo $type; ?>"><?php echo ucfirst($type); ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
                             <label for="branch">Branch:</label>
                             <select id="branch" name="branch" class="form-control" required>
                                 <option value="" disabled selected>Select a branch</option>
@@ -31,6 +40,7 @@
                     </form>
                 </div>
             </div>
+
             <div class="content-wrapper">
                 <div class="content">
                     <h1>Last reports</h1>
@@ -39,6 +49,7 @@
                             <thead>
                                 <tr>
                                     <th scope="col">Person</th>
+                                    <th scope="col">Type</th>
                                     <th scope="col">Total Time</th>
                                     <th scope="col">Branch</th>
                                     <th scope="col">comment</th>
@@ -62,6 +73,7 @@
                                 ?>
                                     <tr>
                                         <td><?php echo $row['person']; ?></td>
+                                        <td><?php echo $row['type']; ?></td>
                                         <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
                                         <td><?php echo $row['branch']; ?></td>
                                         <td><?php echo $row['comment']; ?></td>
@@ -72,6 +84,10 @@
                                     }
                                 }
                                 ?>
+                                <!-- link to all reports -->
+                                <tr>
+                                    <td colspan="4" class="text-center"><a href="all-reports.php">See all reports</a></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -99,6 +115,7 @@
                                 <form action="forms/stop-timer.php" method="post">
                                     <tr>
                                         <td class="align-middle"><?php echo $runningTimer['person']; ?></td>
+                                        <td class="align-middle"><?php echo $runningTimer['type']; ?></td>
                                         <td class="align-middle"><?php echo $runningTimer['start']; ?></td>
                                         <td class="align-middle"><?php echo $runningTimer['branch']; ?></td>
                                         <td class="align-middle text-right">
@@ -123,6 +140,15 @@
                                 <option value="" disabled selected>Select a person</option>
                                 <?php foreach ($persons as $person) { ?>
                                     <option value="<?php echo $person; ?>"><?php echo ucfirst($person); ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Type:</label>
+                            <select id="type" name="type" class="form-control" required>
+                                <option value="" disabled selected>Select a type</option>
+                                <?php foreach ($types as $type) { ?>
+                                    <option value="<?php echo $type; ?>"><?php echo ucfirst($type); ?></option>
                                 <?php } ?>
                             </select>
                         </div>
