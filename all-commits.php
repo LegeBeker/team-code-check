@@ -5,7 +5,7 @@
 <div class="container-fluid">
     <div class="content-wrapper">
         <div class="content">
-            <h1>Commits</h1>
+            <h1>All Commits</h1>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
