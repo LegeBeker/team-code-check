@@ -2,6 +2,15 @@ var localTime = new Date().toLocaleString("en-US", {
     timeZone: "Europe/Amsterdam"
 });
 
+$('.end-timer').click(function () {
+    var timerId = $(this).data('timer_id');
+    var comment = prompt('Please enter a comment');
+
+    $('#comment' + timerId).val(comment);
+
+    $(this).closest('form').submit();
+});
+
 var colors = [
     '#F44336', // Red
     '#E91E63', // Pink
@@ -103,11 +112,132 @@ var chart = new Chart(ctx, {
     }
 });
 
-$('.end-timer').click(function () {
-    var timerId = $(this).data('timer_id');
-    var comment = prompt('Please enter a comment');
+var labels = [];
+var data = [];
 
-    $('#comment' + timerId).val(comment);
+for (var i = 0; i < TypeTimes.length; i++) {
+    labels.push(TypeTimes[i].type);
+    data.push(TypeTimes[i].total_hours);
+}
 
-    $(this).closest('form').submit();
+var ctx2 = document.getElementById('typeChart').getContext('2d');
+var chart2 = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Hours Spent',
+            data: data,
+            backgroundColor: colors
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var labels = [];
+var data = [];
+
+for (var i = 0; i < BranchTimes.length; i++) {
+    labels.push(BranchTimes[i].branch);
+    data.push(BranchTimes[i].total_hours);
+}
+
+var ctx2 = document.getElementById('branchChart').getContext('2d');
+var chart2 = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Hours Spent',
+            data: data,
+            backgroundColor: colors
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+var ctx3 = document.getElementById('totalHoursChart').getContext('2d');
+var targetHours = Array(7).fill(28); // target of 28 hours per week
+var totalHours = actualHours.reduce((a, b) => a + b, 0); // calculate total hours worked
+
+var chart3 = new Chart(ctx3, {
+    type: 'bar',
+    data: {
+        labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'], // replace with actual week numbers
+        datasets: [
+            {
+                label: 'Target Hours',
+                data: targetHours,
+                type: 'line',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                borderWidth: 2,
+                fill: false,
+                yAxisID: 'y-axis'
+            },
+            {
+                label: 'Actual Hours',
+                data: actualHours,
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                yAxisID: 'y-axis'
+            }
+        ]
+    },
+    options: {
+        scales: {
+            yAxes: [{
+                id: 'y-axis',
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 10,
+                    max: 50,
+                    callback: function (value, index, values) {
+                        return value + 'h';
+                    }
+                },
+                scaleLabel: {
+                    display: true,
+                    labelString: 'Hours per Week',
+                    fontSize: 14
+                }
+            }],
+            xAxes: [{
+                ticks: {
+                    fontSize: 14
+                }
+            }]
+        },
+        legend: {
+            labels: {
+                fontSize: 14
+            }
+        },
+        title: {
+            display: true,
+            text: 'Project Hours Report',
+            fontSize: 18,
+            fontColor: '#333'
+        },
+        tooltips: {
+            callbacks: {
+                label: function (tooltipItem, data) {
+                    var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                    return datasetLabel + ': ' + tooltipItem.yLabel + 'h';
+                }
+            }
+        }
+    }
 });
