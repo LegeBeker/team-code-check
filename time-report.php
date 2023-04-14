@@ -1,6 +1,6 @@
 <?php include 'includes/header.php'; ?>
 
-<?php $timeReports = getAllTimeReports($servername, $username, $password, $dbname) ?>
+<?php $timeReports = getAllTimeReports() ?>
 
 <div class="container-fluid">
     <div class="row">
