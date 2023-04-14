@@ -2,6 +2,11 @@
             background-color: #f8f9fa;
         }
 
+        .link-icon {
+            fill: currentColor;
+            vertical-align: middle;
+        }
+
         .navbar {
             background-color: #343a40;
             color: #fff;
