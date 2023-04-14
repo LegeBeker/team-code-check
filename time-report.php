@@ -51,6 +51,7 @@
                                     <th scope="col">Person</th>
                                     <th scope="col">Type</th>
                                     <th scope="col">Total Time</th>
+                                    <th scope="col">Date</th>
                                     <th scope="col">Branch</th>
                                     <th scope="col">comment</th>
                                     <th scope="col"></th>
@@ -59,7 +60,7 @@
                             <tbody>
                                 <?php
                                 if (count(getFinishedTimers($timeReports)) == 0) {
-                                    echo '<tr><td colspan="4">No reports</td></tr>';
+                                    echo '<tr><td colspan="7">No reports</td></tr>';
                                 }
                                 $i = 0;
 
@@ -76,6 +77,7 @@
                                         <td><?php echo ucfirst($row['person']); ?></td>
                                         <td><?php echo $row['type']; ?></td>
                                         <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
+                                        <td><?php echo date('Y/m/d', strtotime($row['end'])); ?></td>
                                         <td><?php echo $row['branch']; ?></td>
                                         <td><?php echo $row['comment']; ?></td>
                                         <td>
@@ -92,7 +94,7 @@
                                 }
                                 ?>
                                 <tr>
-                                    <td colspan="6" class="text-center"><a href="all-reports.php">See all reports</a></td>
+                                    <td colspan="7" class="text-center"><a href="all-reports.php">See all reports</a></td>
                                 </tr>
                             </tbody>
                         </table>
