@@ -49,7 +49,26 @@ finishedTimers.forEach(function (item) {
     groupedData[person][dateStr] += hours;
 });
 
-chartData.labels.sort();
+// Sort the labels as dates
+chartData.labels.sort(function (a, b) {
+    return new Date(a) - new Date(b);
+});
+
+// Create an array of dates from 2023-03-29 to today
+var startDate = new Date('2023-03-29');
+var currentDate = new Date();
+while (startDate <= currentDate) {
+    var dateStr = startDate.toLocaleDateString();
+    if (chartData.labels.indexOf(dateStr) === -1) {
+        chartData.labels.push(dateStr);
+    }
+    startDate.setDate(startDate.getDate() + 1);
+}
+
+// Sort the labels as dates again
+chartData.labels.sort(function (a, b) {
+    return new Date(a) - new Date(b);
+});
 
 // Loop through the grouped data and create a data series for each person
 var colorIndex = 0;
@@ -57,12 +76,13 @@ for (var person in groupedData) {
     if (groupedData.hasOwnProperty(person)) {
         var cumulativeHours = 0;
         var timeData = [];
-        for (var dateStr in groupedData[person]) {
-            if (groupedData[person].hasOwnProperty(dateStr)) {
+        for (var i = 0; i < chartData.labels.length; i++) {
+            var dateStr = chartData.labels[i];
+            if (groupedData[person][dateStr]) {
                 var hours = groupedData[person][dateStr];
                 cumulativeHours += hours;
-                timeData[chartData.labels.indexOf(dateStr)] = cumulativeHours;
             }
+            timeData.push(cumulativeHours);
         }
 
         chartData.datasets.push({
@@ -76,7 +96,6 @@ for (var person in groupedData) {
     }
 }
 
-console.log(chartData);
 
 // Create the chart
 var ctx = document.getElementById('timeReportChart').getContext('2d');
