@@ -4,7 +4,7 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-5">
             <div class="content-wrapper">
                 <div class="content">
                     <h1>Start Timer</h1>
@@ -53,6 +53,7 @@
                                     <th scope="col">Total Time</th>
                                     <th scope="col">Branch</th>
                                     <th scope="col">comment</th>
+                                    <th scope="col"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,6 +78,12 @@
                                         <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
                                         <td><?php echo $row['branch']; ?></td>
                                         <td><?php echo $row['comment']; ?></td>
+                                        <td>
+                                            <form action="forms/delete-timer.php" method="post">
+                                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                                <button type="submit" class="btn btn-danger btn-sm">x</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 <?php
                                     if ($i == 5) {
@@ -84,9 +91,8 @@
                                     }
                                 }
                                 ?>
-                                <!-- link to all reports -->
                                 <tr>
-                                    <td colspan="4" class="text-center"><a href="all-reports.php">See all reports</a></td>
+                                    <td colspan="6" class="text-center"><a href="all-reports.php">See all reports</a></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -101,7 +107,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-8">
+        <div class="col-md-7">
             <div class="content-wrapper">
                 <div class="content">
                     <h1>Running Timers</h1>

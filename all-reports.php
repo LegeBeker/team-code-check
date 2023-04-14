@@ -15,6 +15,7 @@
                             <th scope="col">Total Time</th>
                             <th scope="col">Branch</th>
                             <th scope="col">comment</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,6 +38,12 @@
                                 <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
                                 <td><?php echo $row['branch']; ?></td>
                                 <td><?php echo $row['comment']; ?></td>
+                                <td>
+                                    <form action="forms/delete-timer.php" method="post">
+                                        <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm">x</button>
+                                    </form>
+                                </td>
                             </tr>
                         <?php
                         }
