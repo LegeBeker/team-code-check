@@ -33,7 +33,7 @@
                         foreach ($finishedTimers as $row) {
                         ?>
                             <tr>
-                                <td><?php echo $row['person']; ?></td>
+                                <td><?php echo ucfirst($row['person']); ?></td>
                                 <td><?php echo $row['type']; ?></td>
                                 <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
                                 <td><?php echo $row['branch']; ?></td>
