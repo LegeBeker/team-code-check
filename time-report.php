@@ -165,7 +165,7 @@
                                             <td><?php echo $row['branch']; ?></td>
                                             <td><?php echo $row['comment']; ?></td>
                                             <td>
-                                                <?php if (isset($_SESSION['username']) && ($_SESSION['username'] == $runningTimer['person'] || $_SESSION['username'] == 'volkan')) { ?>
+                                                <?php if (isset($_SESSION['username']) && ($_SESSION['username'] == $row['person'] || $_SESSION['username'] == 'volkan')) { ?>
                                                     <form action="forms/delete-timer.php" method="post">
                                                         <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                                         <button type="submit" class="btn btn-danger btn-sm">x</button>
