@@ -2,14 +2,6 @@ var localTime = new Date().toLocaleString("en-US", {
     timeZone: "Europe/Amsterdam"
 });
 
-// show comment box when end timer button is clicked and set the value of the comment input to the value of the comment box and then submit the form
-$('.end-timer').click(function () {
-    var comment = prompt('Please enter a comment');
-    $('#comment').val(comment);
-    // when the prompt is closed, submit the form
-    $(this).closest('form').submit();
-});
-
 var colors = [
     '#F44336', // Red
     '#E91E63', // Pink
@@ -98,4 +90,13 @@ var chart = new Chart(ctx, {
             }
         }
     }
+});
+
+$('.end-timer').click(function () {
+    var timerId = $(this).data('timer_id');
+    var comment = prompt('Please enter a comment');
+
+    $('#comment' + timerId).val(comment);
+
+    $(this).closest('form').submit();
 });

@@ -107,8 +107,9 @@
                                         <td class="align-middle"><?php echo $runningTimer['start']; ?></td>
                                         <td class="align-middle"><?php echo $runningTimer['branch']; ?></td>
                                         <td class="align-middle text-right">
-                                            <input name="comment" id="comment" type="hidden">
-                                            <button name="end_timer" value="<?php echo $runningTimer['id']; ?>" class="btn btn-danger end-timer">End Timer</button>
+                                            <input name="comment" id="comment<?php echo $runningTimer['id']; ?>" type="hidden">
+                                            <input name="timer_id" value="<?php echo $runningTimer['id']; ?>" type="hidden">
+                                            <button name="end_timer" data-timer_id="<?php echo $runningTimer['id']; ?>" class="btn btn-danger end-timer">End Timer</button>
                                         </td>
                                     </tr>
                                 </form>
