@@ -52,7 +52,7 @@
                             <tbody>
                                 <?php
                                 if (count(getFinishedTimers($timeReports)) == 0) {
-                                    echo '<tr><td>No reports</td></tr>';
+                                    echo '<tr><td colspan="4">No reports</td></tr>';
                                 }
                                 $i = 0;
 
