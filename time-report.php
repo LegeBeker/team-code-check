@@ -141,8 +141,8 @@
                             <input type="datetime-local" id="start-time" name="start_time" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="end-time">End Time:</label>
-                            <input type="datetime-local" id="end-time" name="end_time" class="form-control" required>
+                            <label for="end-time">End Time: (if not filled, it will be running)</label>
+                            <input type="datetime-local" id="end-time" name="end_time" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="branch">Branch:</label>
@@ -155,7 +155,7 @@
                         </div>
                         <div class="form-group">
                             <label for="comment">comment:</label>
-                            <input type="text" id="comment" name="comment" class="form-control" maxlength="50" required>
+                            <input type="text" id="comment" name="comment" class="form-control" maxlength="50">
                         </div>
                         <button type="submit" class="btn btn-primary">Submit</button>
                     </form>
