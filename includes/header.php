@@ -1,4 +1,5 @@
 <?php include 'includes/functions.php'; ?>
+<?php session_start(); ?>
 
 <html lang='en'>
 
@@ -29,12 +30,24 @@
                     <a class="nav-link" href="/graphs.php">Graphs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="https://github.com/LegeBeker/Sagrada" target="_blank">GitHub Page
+                    <a class="nav-link" href="https://github.com/LegeBeker/Sagrada" target="_blank">
+                        GitHub Page
                         <svg width="12" height="12" viewBox="0 0 24 24" class="ml-1">
                             <path class="link-icon" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"></path>
                         </svg>
                     </a>
                 </li>
+            </ul>
+            <ul class="navbar-nav">
+                <?php if (isset($_SESSION['username'])) { ?>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" href="forms/logout.php">Logout</a>
+                    </li>
+                <?php } else { ?>
+                    <li class="nav-item">
+                        <a class="btn btn-secondary" href="/login-page.php">Login</a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </nav>
