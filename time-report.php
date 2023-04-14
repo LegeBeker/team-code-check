@@ -13,14 +13,9 @@
                             <label for="person">Person:</label>
                             <select id="person" name="person" class="form-control" required>
                                 <option value="" disabled selected>Select a person</option>
-                                <option value="volkan">Volkan</option>
-                                <option value="eren">Eren</option>
-                                <option value="tim">Tim</option>
-                                <option value="lars">Lars</option>
-                                <option value="mike">Mike</option>
-                                <option value="roy">Roy</option>
-                                <option value="euphrates">Euphrates</option>
-                                <option value="mourad">Mourad</option>
+                                <?php foreach ($persons as $person) { ?>
+                                    <option value="<?php echo $person; ?>"><?php echo ucfirst($person); ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                         <div class="form-group">
@@ -126,14 +121,9 @@
                             <label for="start-time">Person:</label>
                             <select id="person" name="person" class="form-control" required>
                                 <option value="" disabled selected>Select a person</option>
-                                <option value="volkan">Volkan</option>
-                                <option value="eren">Eren</option>
-                                <option value="tim">Tim</option>
-                                <option value="lars">Lars</option>
-                                <option value="mike">Mike</option>
-                                <option value="roy">Roy</option>
-                                <option value="euphrates">Euphrates</option>
-                                <option value="mourad">Mourad</option>
+                                <?php foreach ($persons as $person) { ?>
+                                    <option value="<?php echo $person; ?>"><?php echo ucfirst($person); ?></option>
+                                <?php } ?>
                             </select>
                         </div>
                         <div class="form-group">
