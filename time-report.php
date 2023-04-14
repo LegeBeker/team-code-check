@@ -67,8 +67,9 @@ $timeReports = getAllTimeReports();
 
 <body>
     <nav class="navbar">
-        <a class="navbar-brand" href="/time-report.php">Time Report</a>
         <a class="navbar-brand" href="/">Home</a>
+        <a class="navbar-brand" href="/time-report.php">Time Report</a>
+        <a class="navbar-brand" href="/graphs.php">Graphs</a>
         <a class="navbar-brand" href="https://github.com/LegeBeker/Sagrada" target="_blank">GitHub Page</a>
     </nav>
     <div class="container-fluid">
