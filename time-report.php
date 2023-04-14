@@ -39,12 +39,18 @@ function getAllTimeReports()
 
     $result = $conn->query($sql);
 
+    $data = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $data[] = $row;
+    }
+
     $conn->close();
 
-    return $result;
+    return $data;
 }
 
 $branches = fetchAllBranches($accessToken);
+$timeReports = getAllTimeReports();
 ?>
 
 
@@ -56,6 +62,7 @@ $branches = fetchAllBranches($accessToken);
     <title>Time Report</title>
     <link rel='stylesheet' href='css/master.css'>
     <link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css' integrity='sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z' crossorigin='anonymous'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -127,19 +134,14 @@ $branches = fetchAllBranches($accessToken);
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $timeReports = getAllTimeReports();
-                                    if ($timeReports->num_rows > 0) {
-                                        while ($row = $timeReports->fetch_assoc()) {
-                                            $person = $row['person'];
-                                            $totalTime = gmdate("H:i", $row['total_seconds']);
-                                            $branch = $row['branch'];
-                                            $description = $row['description'];
+                                    if (count($timeReports) > 0) {
+                                        foreach ($timeReports as $row) {
                                     ?>
                                             <tr>
-                                                <td><?php echo $person; ?></td>
-                                                <td><?php echo $totalTime; ?></td>
-                                                <td><?php echo $branch; ?></td>
-                                                <td><?php echo $description; ?></td>
+                                                <td><?php echo $row['person']; ?></td>
+                                                <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
+                                                <td><?php echo $row['branch']; ?></td>
+                                                <td><?php echo $row['description']; ?></td>
                                             </tr>
                                     <?php
                                         }
@@ -150,13 +152,106 @@ $branches = fetchAllBranches($accessToken);
                         </div>
                     </div>
                 </div>
+
+                <div class="content-wrapper">
+                    <div class="content">
+                        <h1>Cumulative Hours</h1>
+                        <canvas id="timeReportChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <script>
+        var data = <?php echo json_encode($timeReports); ?>;
+
+        var colors = [
+            '#F44336', // Red
+            '#E91E63', // Pink
+            '#9C27B0', // Purple
+            '#673AB7', // Deep Purple
+            '#3F51B5', // Indigo
+            '#2196F3', // Blue
+            '#03A9F4', // Light Blue
+            '#00BCD4', // Cyan
+            '#009688', // Teal
+            '#4CAF50', // Green
+            '#8BC34A', // Light Green
+            '#CDDC39', // Lime
+            '#FFEB3B', // Yellow
+            '#FFC107', // Amber
+            '#FF9800', // Orange
+            '#FF5722' // Deep Orange
+        ];
+
+        // Group the data by person
+        var groupedData = {};
+        data.forEach(function(item) {
+            var person = item.person.toLowerCase();
+            if (!groupedData[person]) {
+                groupedData[person] = {};
+            }
+            var dateStr = new Date(item.end).toDateString();
+            if (!groupedData[person][dateStr]) {
+                groupedData[person][dateStr] = 0;
+            }
+            var start = new Date(item.start);
+            var end = new Date(item.end);
+            var timeDiff = end.getTime() - start.getTime();
+            var hours = timeDiff / (1000 * 60 * 60); // Convert milliseconds to hours
+            groupedData[person][dateStr] += hours;
+        });
+
+        // Create the chart data
+        var chartData = {
+            labels: [], // x-axis labels
+            datasets: [] // data series
+        };
+
+        // Loop through the grouped data and create a data series for each person
+        var colorIndex = 0;
+        for (var person in groupedData) {
+            if (groupedData.hasOwnProperty(person)) {
+                var cumulativeHours = 0;
+                var timeData = [];
+                for (var dateStr in groupedData[person]) {
+                    if (groupedData[person].hasOwnProperty(dateStr)) {
+                        var hours = groupedData[person][dateStr];
+                        cumulativeHours += hours;
+                        timeData.push(cumulativeHours);
+                        if (chartData.labels.indexOf(dateStr) === -1) {
+                            chartData.labels.push(dateStr);
+                        }
+                    }
+                }
+
+                chartData.datasets.push({
+                    label: person.charAt(0).toUpperCase() + person.slice(1),
+                    data: timeData,
+                    fill: false,
+                    borderColor: colors[colorIndex],
+                    backgroundColor: colors[colorIndex],
+                });
+                colorIndex = (colorIndex + 1) % colors.length;
+            }
+        }
+
+        // Create the chart
+        var ctx = document.getElementById('timeReportChart').getContext('2d');
+        var chart = new Chart(ctx, {
+            type: 'line',
+            data: chartData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js" integrity="sha384-w2jmWwRyy/xMjqZGY1YvYg/F28Wd6oGVH6HQ9l5U5D6gokL0Ubs1Z3qymjC4/rQo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QLvJoaZeEWA1Ai/6WKWbTvEJvGOfn" crossorigin="anonymous"></script>
 </body>
 
 </html>
