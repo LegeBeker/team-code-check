@@ -2,6 +2,8 @@
 
 <?php $timeReports = getAllTimeReports() ?>
 
+<?php $branches = fetchAllBranches($accessToken) ?>
+
 <div class="container-fluid">
     <div class="row">
         <?php if (isset($_SESSION['username'])) { ?>
@@ -33,7 +35,7 @@
                                 <label for="branch">Branch:</label>
                                 <select id="branch" name="branch" class="form-control" required>
                                     <option value="" disabled selected>Select a branch</option>
-                                    <?php foreach (fetchAllBranches($accessToken) as $branch) { ?>
+                                    <?php foreach ($branches as $branch) { ?>
                                         <option value="<?php echo $branch['name']; ?>"><?php echo $branch['name']; ?></option>
                                     <?php } ?>
                                 </select>
@@ -77,7 +79,7 @@
                                 <label for="branch">Branch:</label>
                                 <select id="branch" name="branch" class="form-control" required>
                                     <option value="" disabled selected>Select a branch</option>
-                                    <?php foreach (fetchAllBranches($accessToken) as $branch) { ?>
+                                    <?php foreach ($branches as $branch) { ?>
                                         <option value="<?php echo $branch['name']; ?>"><?php echo $branch['name']; ?></option>
                                     <?php } ?>
                                 </select>
@@ -86,7 +88,7 @@
                                 <label for="comment">comment:</label>
                                 <input type="text" id="comment" name="comment" class="form-control" maxlength="50">
                             </div>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary btn-block">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -101,10 +103,12 @@
                         <table class="table table-hover">
                             <tbody>
                                 <?php
-                                if (count(getRunningTimers($timeReports)) == 0) {
+                                $runningTimers = getRunningTimers($timeReports);
+
+                                if (empty($runningTimers)) {
                                     echo '<tr><td colspan="4" class="text-muted text-center">No running timers</td></tr>';
                                 }
-                                foreach (getRunningTimers($timeReports) as $runningTimer) { ?>
+                                foreach ($runningTimers as $runningTimer) { ?>
                                     <form action="forms/stop-timer.php" method="post">
                                         <tr>
                                             <td class="align-middle"><?php echo ucfirst($runningTimer['person']); ?></td>
@@ -143,12 +147,13 @@
                                 </thead>
                                 <tbody>
                                     <?php
-                                    if (count(getFinishedTimers($timeReports)) == 0) {
+                                    $finishedTimers = getFinishedTimers($timeReports);
+
+                                    if (count($finishedTimers) == 0) {
                                         echo '<tr><td colspan="7">No reports</td></tr>';
                                     }
                                     $i = 0;
 
-                                    $finishedTimers = getFinishedTimers($timeReports);
 
                                     usort($finishedTimers, function ($a, $b) {
                                         return strtotime($b['end']) - strtotime($a['end']);
