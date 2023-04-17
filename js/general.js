@@ -181,7 +181,9 @@ var chart2 = new Chart(ctx2, {
 
 var ctx3 = document.getElementById('totalHoursChart').getContext('2d');
 var targetHours = Array(7).fill(28); // target of 28 hours per week
-var totalHours = actualHours.reduce((a, b) => a + b, 0); // calculate total hours worked
+var totalHours = Object.values(actualHours).reduce((a, b) => a + b);
+
+console.log(totalHours);
 
 var chart3 = new Chart(ctx3, {
     type: 'bar',
@@ -199,7 +201,7 @@ var chart3 = new Chart(ctx3, {
             },
             {
                 label: 'Actual Hours',
-                data: actualHours,
+                data: totalHours,
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
