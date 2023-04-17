@@ -38,7 +38,7 @@
                                     <?php } ?>
                                 </select>
                             </div>
-                            <button type="submit" class="btn btn-success btn-block">Start Timer</button>
+                            <button type="submit" class="btn btn-success btn-block"><i class="fa fa-play"></i> Start Timer</button>
                         </form>
                     </div>
                 </div>
@@ -115,7 +115,7 @@
                                                 <input name="comment" id="comment<?php echo $runningTimer['id']; ?>" type="hidden">
                                                 <input name="timer_id" value="<?php echo $runningTimer['id']; ?>" type="hidden">
                                                 <?php if (isset($_SESSION['username']) && ($_SESSION['username'] == $runningTimer['person'] || $_SESSION['username'] == 'volkan')) { ?>
-                                                    <button name="end_timer" data-timer_id="<?php echo $runningTimer['id']; ?>" class="btn btn-danger end-timer">End Timer</button>
+                                                    <button name="end_timer" data-timer_id="<?php echo $runningTimer['id']; ?>" class="btn btn-danger end-timer"><i class="fa fa-stop"></i> Stop</button>
                                                 <?php } ?>
                                             </td>
                                         </tr>
@@ -137,7 +137,7 @@
                                         <th scope="col">Total Time</th>
                                         <th scope="col">Date</th>
                                         <th scope="col">Branch</th>
-                                        <th scope="col">comment</th>
+                                        <th scope="col">Comment</th>
                                         <th scope="col"></th>
                                     </tr>
                                 </thead>
@@ -160,7 +160,7 @@
                                         <tr>
                                             <td><?php echo ucfirst($row['person']); ?></td>
                                             <td><?php echo $row['type']; ?></td>
-                                            <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
+                                            <td><i class="fas fa-clock text-secondary"></i> <?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
                                             <td><?php echo date('Y/m/d', strtotime($row['end'])); ?></td>
                                             <td><?php echo $row['branch']; ?></td>
                                             <td><?php echo $row['comment']; ?></td>

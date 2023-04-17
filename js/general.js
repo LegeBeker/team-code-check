@@ -132,6 +132,11 @@ var chart2 = new Chart(ctx2, {
         }]
     },
     options: {
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
         scales: {
             y: {
                 beginAtZero: true
@@ -148,6 +153,7 @@ for (var i = 0; i < BranchTimes.length; i++) {
     data.push(BranchTimes[i].total_hours);
 }
 
+
 var ctx2 = document.getElementById('branchChart').getContext('2d');
 var chart2 = new Chart(ctx2, {
     type: 'bar',
@@ -160,6 +166,11 @@ var chart2 = new Chart(ctx2, {
         }]
     },
     options: {
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
         scales: {
             y: {
                 beginAtZero: true
@@ -182,8 +193,8 @@ var chart3 = new Chart(ctx3, {
                 data: targetHours,
                 type: 'line',
                 borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderWidth: 2,
-                fill: false,
                 yAxisID: 'y-axis'
             },
             {
