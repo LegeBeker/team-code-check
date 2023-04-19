@@ -25,7 +25,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/time-report.php">Time Report</a>
+                    <a class="nav-link" href="/commits.php">Commits</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/graphs.php">Graphs</a>
