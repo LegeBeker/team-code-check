@@ -25,10 +25,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/commits.php">Commits</a>
+                    <a class="nav-link" href="/commits">Commits</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/graphs.php">Graphs</a>
+                    <a class="nav-link" href="/graphs">Graphs</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://github.com/LegeBeker/Sagrada" target="_blank">
