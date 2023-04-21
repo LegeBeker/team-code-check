@@ -30,7 +30,6 @@ var colors = [
     '#FF5722' // Deep Orange
 ];
 
-
 // Create the chart data
 var chartData = {
     labels: [], // x-axis labels
@@ -153,17 +152,27 @@ for (var i = 0; i < BranchTimes.length; i++) {
     data.push(BranchTimes[i].total_hours);
 }
 
+var targetHoursBranch = Array(BranchTimes.length).fill(8); // target of 28 hours per week
 
 var ctx2 = document.getElementById('branchChart').getContext('2d');
 var chart2 = new Chart(ctx2, {
     type: 'bar',
     data: {
         labels: labels,
-        datasets: [{
-            label: 'Hours Spent',
-            data: data,
-            backgroundColor: colors
-        }]
+        datasets: [
+            {
+                label: 'Target Hours',
+                data: targetHoursBranch,
+                type: 'line',
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                borderWidth: 2,
+            },
+            {
+                label: 'Hours Spent',
+                data: data,
+                backgroundColor: colors
+            }]
     },
     options: {
         plugins: {
@@ -199,7 +208,9 @@ var chart3 = new Chart(ctx3, {
             {
                 label: 'Actual Hours',
                 data: Object.values(actualHours),
-                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                backgroundColor: function (value, index) {
+                    return getColor(value["raw"]);
+                },
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
                 yAxisID: 'y-axis'
@@ -207,6 +218,11 @@ var chart3 = new Chart(ctx3, {
         ]
     },
     options: {
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
         scales: {
             yAxes: [{
                 id: 'y-axis',
@@ -251,3 +267,265 @@ var chart3 = new Chart(ctx3, {
         }
     }
 });
+
+function getColor(value) {
+    if (value > 8) {
+        return `hsl(120, 100%, 80%)`;
+    }
+    return `hsl(${(value / 8) * 120}, 100%, ${((value / 8) * 30) + 50}%)`;
+}
+
+
+for (var i = 0; i < Object.keys(actualHoursPerson).length; i++) {
+
+    var person = Object.keys(actualHoursPerson)[i];
+    var personHours = Object.values(actualHoursPerson)[i];
+
+    var ctx = document.getElementById(person + 'Chart').getContext('2d');
+    var targetHours = Array(7).fill(8); // target of 28 hours per week
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'], // replace with actual week numbers
+            datasets: [
+                {
+                    label: 'Target Hours',
+                    data: targetHours,
+                    type: 'line',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 2,
+                    yAxisID: 'y-axis'
+                },
+                {
+                    label: 'Actual Hours',
+                    data: personHours,
+                    backgroundColor: function (value, index) {
+                        return getColor(value["raw"]);
+                    },
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y-axis'
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            animation: false,
+            scales: {
+                yAxes: [{
+                    id: 'y-axis',
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 10,
+                        max: 50,
+                        callback: function (value, index, values) {
+                            return value + 'h';
+                        }
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Hours per Week',
+                        fontSize: 14
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 14
+                    }
+                }]
+            },
+            legend: {
+                labels: {
+                    fontSize: 14
+                }
+            },
+            title: {
+                display: true,
+                text: 'Project Hours Report',
+                fontSize: 18,
+                fontColor: '#333'
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                        return datasetLabel + ': ' + tooltipItem.yLabel + 'h';
+                    }
+                }
+            }
+        }
+    });
+}
+
+// Create the chart data
+var chartData = {
+    labels: [], // x-axis labels
+    datasets: [] // data series
+};
+
+// Define the start and end dates
+var startDate = new Date('2023-04-17');
+var endDate = new Date('2023-06-04');
+
+// Add the x-axis labels to the chart data
+var currentDate = new Date(startDate);
+while (currentDate <= endDate) {
+    var dateStr = currentDate.toLocaleDateString();
+    chartData.labels.push(dateStr);
+    currentDate.setDate(currentDate.getDate() + 1);
+}
+
+// 0 for first day, 672 for last day
+var projectionData = [];
+projectionData[0] = 0;
+projectionData[chartData.labels.length - 1] = 672;
+
+chartData.datasets.push({
+    label: 'Projection',
+    data: projectionData,
+    borderColor: 'rgba(54, 162, 235, 0.2)',
+    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+    lineTension: 0,
+});
+
+// Calculate the y-axis values for the cumulative time worked line
+var cumulativeData = [];
+var cumulativeSeconds = 0;
+for (var i = 0; i < finishedTimers.length; i++) {
+    var timer = finishedTimers[i];
+    var timerStart = new Date(timer.start);
+    var timerEnd = new Date(timer.end);
+    var timerSeconds = (timerEnd - timerStart) / 1000;
+    cumulativeSeconds += timerSeconds;
+    var timerDay = timerStart.toLocaleDateString();
+    var timerDayIndex = chartData.labels.indexOf(timerDay);
+    cumulativeData[timerDayIndex] = cumulativeSeconds / 3600;
+}
+
+// Add the cumulative time worked line to the chart data
+chartData.datasets.push({
+    label: 'Cumulative Time Worked',
+    data: cumulativeData,
+    fill: false,
+    borderColor: 'rgba(54, 162, 235, 1)',
+    backgroundColor: 'rgba(54, 162, 235, 1)',
+    lineTension: 0,
+});
+
+// Create the chart
+var ctx = document.getElementById('projectionChart').getContext('2d');
+var chart = new Chart(ctx, {
+    type: 'line',
+    data: chartData,
+    options: {
+        spanGaps: true,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                },
+            }],
+            xAxes: [{
+                ticks: {
+                    beginAtZero: true,
+                },
+            }],
+        },
+    },
+});
+
+for (var i = 1; i <= 7; i++) {
+    var weekHours = [];
+    for (var j = 0; j < Object.keys(actualHoursPerson).length; j++) {
+        weekHours.push(Object.values(actualHoursPerson)[j][i - 1]);
+    }
+
+    console.log(weekHours);
+
+    var ctx = document.getElementById(i + 'Chart').getContext('2d');
+    var targetHours = Array(Object.keys(actualHoursPerson).length).fill(8); // target of 28 hours per week
+
+    var chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(actualHoursPerson),
+            datasets: [
+                {
+                    label: 'Target Hours',
+                    data: targetHours,
+                    type: 'line',
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderWidth: 2,
+                    yAxisID: 'y-axis'
+                },
+                {
+                    label: 'Actual Hours',
+                    data: weekHours,
+                    backgroundColor: function (value, index) {
+                        return getColor(value["raw"]);
+                    },
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    yAxisID: 'y-axis'
+                }
+            ]
+        },
+        options: {
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            animation: false,
+            scales: {
+                yAxes: [{
+                    id: 'y-axis',
+                    ticks: {
+                        beginAtZero: true,
+                        stepSize: 10,
+                        max: 50,
+                        callback: function (value, index, values) {
+                            return value + 'h';
+                        }
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Hours per Person',
+                        fontSize: 14,
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 14
+                    }
+                }]
+            },
+            legend: {
+                labels: {
+                    fontSize: 14
+                }
+            },
+            title: {
+                display: true,
+                text: 'Week ' + i,
+                fontSize: 18,
+                fontColor: '#333'
+            },
+            tooltips: {
+                callbacks: {
+                    label: function (tooltipItem, data) {
+                        var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
+                        return datasetLabel + ': ' + tooltipItem.yLabel + 'h';
+                    }
+                }
+            }
+        }
+    });
+}

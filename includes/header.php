@@ -16,7 +16,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/">
-            <img src="https://volkanwelp.com/img/favicon.ico" height="25px" class="mr-2" alt="">
+            <img src="https://volkanwelp.com/img/favicon.ico" height="25px" class="mr-2">
             Sagrada
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,10 +25,10 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/commits.php">Commits</a>
+                    <a class="nav-link" href="/graphs.php">Graphs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/graphs.php">Graphs</a>
+                    <a class="nav-link" href="/commits.php">Commits</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="https://github.com/LegeBeker/Sagrada" target="_blank">
