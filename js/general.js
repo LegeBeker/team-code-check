@@ -105,7 +105,17 @@ var chart = new Chart(ctx, {
     options: {
         scales: {
             y: {
-                beginAtZero: true
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 5,
+                    max: 50,
+                    callback: function (value, index, values) {
+                        return value + 'h';
+                    }
+                }
+            },
+            x: {
+                display: false
             }
         }
     }
@@ -121,7 +131,7 @@ for (var i = 0; i < TypeTimes.length; i++) {
 
 var ctx2 = document.getElementById('typeChart').getContext('2d');
 var chart2 = new Chart(ctx2, {
-    type: 'bar',
+    type: 'pie',
     data: {
         labels: labels,
         datasets: [{
@@ -129,18 +139,6 @@ var chart2 = new Chart(ctx2, {
             data: data,
             backgroundColor: colors
         }]
-    },
-    options: {
-        plugins: {
-            legend: {
-                display: false
-            }
-        },
-        scales: {
-            y: {
-                beginAtZero: true
-            }
-        }
     }
 });
 
@@ -182,7 +180,19 @@ var chart2 = new Chart(ctx2, {
         },
         scales: {
             y: {
-                beginAtZero: true
+                ticks: {
+                    beginAtZero: true,
+                    stepSize: 5,
+                    max: 50,
+                    callback: function (value, index, values) {
+                        return value + 'h';
+                    }
+                }
+            },
+            x: {
+                ticks: {
+                    fontSize: 14
+                }
             }
         }
     }
@@ -203,7 +213,6 @@ var chart3 = new Chart(ctx3, {
                 borderColor: 'rgba(255, 99, 132, 1)',
                 backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 borderWidth: 2,
-                yAxisID: 'y-axis'
             },
             {
                 label: 'Actual Hours',
@@ -213,7 +222,6 @@ var chart3 = new Chart(ctx3, {
                 },
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
-                yAxisID: 'y-axis'
             }
         ]
     },
@@ -224,11 +232,10 @@ var chart3 = new Chart(ctx3, {
             }
         },
         scales: {
-            yAxes: [{
-                id: 'y-axis',
+            y: {
                 ticks: {
                     beginAtZero: true,
-                    stepSize: 10,
+                    stepSize: 5,
                     max: 50,
                     callback: function (value, index, values) {
                         return value + 'h';
@@ -239,12 +246,12 @@ var chart3 = new Chart(ctx3, {
                     labelString: 'Hours per Week',
                     fontSize: 14
                 }
-            }],
-            xAxes: [{
+            },
+            x: {
                 ticks: {
                     fontSize: 14
                 }
-            }]
+            }
         },
         legend: {
             labels: {
@@ -296,7 +303,6 @@ for (var i = 0; i < Object.keys(actualHoursPerson).length; i++) {
                     borderColor: 'rgba(255, 99, 132, 1)',
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderWidth: 2,
-                    yAxisID: 'y-axis'
                 },
                 {
                     label: 'Actual Hours',
@@ -306,7 +312,6 @@ for (var i = 0; i < Object.keys(actualHoursPerson).length; i++) {
                     },
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1,
-                    yAxisID: 'y-axis'
                 }
             ]
         },
@@ -318,45 +323,24 @@ for (var i = 0; i < Object.keys(actualHoursPerson).length; i++) {
             },
             animation: false,
             scales: {
-                yAxes: [{
-                    id: 'y-axis',
+                y: {
                     ticks: {
                         beginAtZero: true,
-                        stepSize: 10,
                         max: 50,
                         callback: function (value, index, values) {
                             return value + 'h';
                         }
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Hours per Week',
-                        fontSize: 14
                     }
-                }],
-                xAxes: [{
+                },
+                x: {
                     ticks: {
                         fontSize: 14
                     }
-                }]
+                }
             },
             legend: {
                 labels: {
                     fontSize: 14
-                }
-            },
-            title: {
-                display: true,
-                text: 'Project Hours Report',
-                fontSize: 18,
-                fontColor: '#333'
-            },
-            tooltips: {
-                callbacks: {
-                    label: function (tooltipItem, data) {
-                        var datasetLabel = data.datasets[tooltipItem.datasetIndex].label || '';
-                        return datasetLabel + ': ' + tooltipItem.yLabel + 'h';
-                    }
                 }
             }
         }
@@ -426,16 +410,17 @@ var chart = new Chart(ctx, {
     options: {
         spanGaps: true,
         scales: {
-            yAxes: [{
+            y: {
                 ticks: {
                     beginAtZero: true,
+                    callback: function (value, index, values) {
+                        return value + 'h';
+                    }
                 },
-            }],
-            xAxes: [{
-                ticks: {
-                    beginAtZero: true,
-                },
-            }],
+            },
+            x: {
+                display: false,
+            },
         },
     },
 });
@@ -445,8 +430,6 @@ for (var i = 1; i <= 7; i++) {
     for (var j = 0; j < Object.keys(actualHoursPerson).length; j++) {
         weekHours.push(Object.values(actualHoursPerson)[j][i - 1]);
     }
-
-    console.log(weekHours);
 
     var ctx = document.getElementById(i + 'Chart').getContext('2d');
     var targetHours = Array(Object.keys(actualHoursPerson).length).fill(8); // target of 28 hours per week
@@ -463,7 +446,6 @@ for (var i = 1; i <= 7; i++) {
                     borderColor: 'rgba(255, 99, 132, 1)',
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                     borderWidth: 2,
-                    yAxisID: 'y-axis'
                 },
                 {
                     label: 'Actual Hours',
@@ -473,7 +455,6 @@ for (var i = 1; i <= 7; i++) {
                     },
                     borderColor: 'rgba(54, 162, 235, 1)',
                     borderWidth: 1,
-                    yAxisID: 'y-axis'
                 }
             ]
         },
@@ -485,27 +466,21 @@ for (var i = 1; i <= 7; i++) {
             },
             animation: false,
             scales: {
-                yAxes: [{
-                    id: 'y-axis',
+                y: {
                     ticks: {
                         beginAtZero: true,
-                        stepSize: 10,
+                        min: 10,
                         max: 50,
                         callback: function (value, index, values) {
                             return value + 'h';
                         }
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Hours per Person',
-                        fontSize: 14,
                     }
-                }],
-                xAxes: [{
+                },
+                x: {
                     ticks: {
                         fontSize: 14
                     }
-                }]
+                }
             },
             legend: {
                 labels: {
