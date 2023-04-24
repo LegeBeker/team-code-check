@@ -199,7 +199,7 @@ var chart2 = new Chart(ctx2, {
 });
 
 var ctx3 = document.getElementById('totalHoursChart').getContext('2d');
-var targetHours = Array(7).fill(28); // target of 28 hours per week
+var targetHours = Array(7).fill(84); // target of 28 hours per week
 
 var chart3 = new Chart(ctx3, {
     type: 'bar',
@@ -368,7 +368,7 @@ while (currentDate <= endDate) {
 // 0 for first day, 672 for last day
 var projectionData = [];
 projectionData[0] = 0;
-projectionData[chartData.labels.length - 1] = 672;
+projectionData[chartData.labels.length - 1] = 570;
 
 chartData.datasets.push({
     label: 'Projection',
@@ -432,7 +432,7 @@ for (var i = 1; i <= 7; i++) {
     }
 
     var ctx = document.getElementById(i + 'Chart').getContext('2d');
-    var targetHours = Array(Object.keys(actualHoursPerson).length).fill(8); // target of 28 hours per week
+    var targetHours = Array(Object.keys(actualHoursPerson).length).fill(14); // target of 28 hours per week
 
     var chart = new Chart(ctx, {
         type: 'bar',
