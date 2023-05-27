@@ -282,71 +282,72 @@ function getColor(value) {
     return `hsl(${(value / 8) * 120}, 100%, ${((value / 8) * 30) + 50}%)`;
 }
 
+// if there are person + chart elements, create a chart for each person
+if (document.getElementsByClassName('personChart').length > 0) {
+    for (var i = 0; i < Object.keys(actualHoursPerson).length; i++) {
 
-for (var i = 0; i < Object.keys(actualHoursPerson).length; i++) {
+        var person = Object.keys(actualHoursPerson)[i];
+        var personHours = Object.values(actualHoursPerson)[i];
 
-    var person = Object.keys(actualHoursPerson)[i];
-    var personHours = Object.values(actualHoursPerson)[i];
+        var ctx = document.getElementById(person + 'Chart').getContext('2d');
+        var targetHours = Array(7).fill(8); // target of 28 hours per week
 
-    var ctx = document.getElementById(person + 'Chart').getContext('2d');
-    var targetHours = Array(7).fill(8); // target of 28 hours per week
-
-    var chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'], // replace with actual week numbers
-            datasets: [
-                {
-                    label: 'Target Hours',
-                    data: targetHours,
-                    type: 'line',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderWidth: 2,
-                },
-                {
-                    label: 'Actual Hours',
-                    data: personHours,
-                    backgroundColor: function (value, index) {
-                        return getColor(value["raw"]);
+        var chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4', 'Week 5', 'Week 6', 'Week 7'], // replace with actual week numbers
+                datasets: [
+                    {
+                        label: 'Target Hours',
+                        data: targetHours,
+                        type: 'line',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderWidth: 2,
                     },
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                }
-            ]
-        },
-        options: {
-            plugins: {
-                legend: {
-                    display: false
-                }
+                    {
+                        label: 'Actual Hours',
+                        data: personHours,
+                        backgroundColor: function (value, index) {
+                            return getColor(value["raw"]);
+                        },
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                    }
+                ]
             },
-            animation: false,
-            scales: {
-                y: {
-                    ticks: {
-                        beginAtZero: true,
-                        max: 50,
-                        callback: function (value, index, values) {
-                            return value + 'h';
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                animation: false,
+                scales: {
+                    y: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 50,
+                            callback: function (value, index, values) {
+                                return value + 'h';
+                            }
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            fontSize: 14
                         }
                     }
                 },
-                x: {
-                    ticks: {
+                legend: {
+                    labels: {
                         fontSize: 14
                     }
                 }
-            },
-            legend: {
-                labels: {
-                    fontSize: 14
-                }
             }
-        }
-    });
+        });
+    }
 }
-
 // Create the chart data
 var chartData = {
     labels: [], // x-axis labels
