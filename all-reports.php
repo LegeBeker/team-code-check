@@ -10,6 +10,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th scope="col">#</th>
                             <th scope="col">Person</th>
                             <th scope="col">Type</th>
                             <th scope="col">Total Time</th>
@@ -34,11 +35,20 @@
                         foreach ($finishedTimers as $row) {
                         ?>
                             <tr>
-                                <td><?php echo ucfirst($row['person']); ?></td>
+                                <td><?php echo ucfirst($row['id']); ?></td>
+                                <td class="<?php if (isset($_SESSION['username']) && ($_SESSION['username'] == $row['person'])) {
+                                                echo "text-danger";
+                                            } else {
+                                                echo "text-secondary";
+                                            }; ?>"><?php echo ucfirst($row['person']); ?></td>
                                 <td><?php echo $row['type']; ?></td>
                                 <td><?php echo sprintf('%02d:%02d', floor($row['total_seconds'] / 3600), floor(($row['total_seconds'] - (floor($row['total_seconds'] / 3600) * 3600)) / 60)); ?></td>
                                 <td><?php echo date('Y/m/d', strtotime($row['end'])); ?></td>
-                                <td><?php echo $row['branch']; ?></td>
+                                <td><span class="badge badge-<?php if ($row['branch'] == "main") {
+                                                                    echo "danger";
+                                                                } else {
+                                                                    echo "secondary";
+                                                                }; ?>"> <?php echo $row['branch']; ?></span></td>
                                 <td><?php echo $row['comment']; ?></td>
                                 <td>
                                     <?php if (isset($_SESSION['username']) && ($_SESSION['username'] == $row['person'] || $_SESSION['username'] == 'volkan')) { ?>
