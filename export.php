@@ -98,7 +98,6 @@
                                 <th scope="col">Datum</th>
                                 <th scope="col">Taak (Branch)</th>
                                 <th scope="col">comment</th>
-                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,14 +121,6 @@
                                     <td><?php echo date('Y/m/d', strtotime($row['end'])); ?></td>
                                     <td><?php echo $row['branch']; ?></td>
                                     <td><?php echo $row['comment']; ?></td>
-                                    <td>
-                                        <?php if (isset($_SESSION['username']) && ($_SESSION['username'] == $row['person'] || $_SESSION['username'] == 'volkan')) { ?>
-                                            <form action="forms/delete-timer.php" method="post">
-                                                <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                                <button type="submit" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                                            </form>
-                                        <?php } ?>
-                                    </td>
                                 </tr>
                             <?php
                             }
